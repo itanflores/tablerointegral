@@ -110,6 +110,30 @@ if "Uso CPU (%)" in df_filtrado.columns and "Temperatura (°C)" in df_filtrado.c
     st.plotly_chart(px.line(df_future_temp, x="Fecha", y="Temperatura Predicha (°C)", title="📈 Predicción de Temperatura Crítica", markers=True), use_container_width=True)
     st.write("Este gráfico predice la temperatura crítica en función del uso de CPU y la carga de red.")
 
+# 🔹 Nueva Sección: Análisis de Datos
+st.header("📊 Análisis de Datos")
+
+# Calcular la matriz de correlación
+st.subheader("📊 Matriz de Correlación entre Variables")
+corr_matrix = df_filtrado[["Uso CPU (%)", "Memoria Utilizada (%)", "Carga de Red (MB/s)", "Temperatura (°C)"]].corr()
+
+# Mostrar la matriz de correlación como un heatmap
+fig_corr = px.imshow(
+    corr_matrix,
+    labels=dict(x="Variable", y="Variable", color="Correlación"),
+    x=corr_matrix.columns,
+    y=corr_matrix.columns,
+    color_continuous_scale="Viridis",
+    title="Matriz de Correlación entre Variables"
+)
+st.plotly_chart(fig_corr, use_container_width=True)
+st.write("""
+Este gráfico muestra la matriz de correlación entre las variables del sistema. 
+- Un valor cercano a **1** indica una correlación positiva fuerte.
+- Un valor cercano a **-1** indica una correlación negativa fuerte.
+- Un valor cercano a **0** indica que no hay correlación.
+""")
+
 # 🔹 Sección 3: Análisis de Outliers y Eficiencia Térmica
 st.header("📊 Análisis de Outliers y Eficiencia Térmica")
 
