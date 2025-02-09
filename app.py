@@ -125,3 +125,4 @@ st.write("""
 - **Temperatura Media (°C)**: Promedio de la temperatura en el dataset filtrado.
 - **Eficiencia Térmica**: Relación entre el uso de CPU y la temperatura. Un valor más alto indica mayor eficiencia.
 """)
+
