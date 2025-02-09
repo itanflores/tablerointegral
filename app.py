@@ -36,6 +36,7 @@ df_grouped["Cantidad_Suavizada"] = df_grouped.groupby("Estado del Sistema")["Can
 df_avg = df_filtrado.groupby("Estado del Sistema")[["Uso CPU (%)", "Memoria Utilizada (%)", "Carga de Red (MB/s)"]].mean().reset_index()
 
 # 🔹 Sección 1: Estado Actual
+# 🔹 Sección 1: Estado Actual
 st.header("📌 Estado Actual")
 kpi1, kpi2, kpi3, kpi4 = st.columns(4)
 kpi1.metric("Crítico", total_counts.loc[total_counts["Estado"] == "Crítico", "Cantidad"].values[0] if "Crítico" in total_counts["Estado"].values else 0)
@@ -52,9 +53,19 @@ with col1:
 with col2:
     st.plotly_chart(px.line(df_grouped, x="Fecha", y="Cantidad_Suavizada", color="Estado del Sistema", title="📈 Evolución en el Tiempo", markers=True), use_container_width=True)
     st.write("Este gráfico representa la evolución temporal de los estados del sistema, permitiendo visualizar patrones y tendencias a lo largo del tiempo.")
-    st.plotly_chart(px.scatter(df_filtrado, x="Uso CPU (%)", y="Memoria Utilizada (%)", color="Estado del Sistema", title="📊 Relación entre Uso de CPU y Memoria"), use_container_width=True)
-    st.write("Este gráfico muestra la relación entre el uso de CPU y la memoria utilizada, lo que ayuda a identificar cuellos de botella en el sistema.")
-
+    
+    # Gráfico de dispersión: Relación entre Uso de CPU y Temperatura
+    st.plotly_chart(px.scatter(
+        df_filtrado,
+        x="Uso CPU (%)",
+        y="Temperatura (°C)",
+        color="Estado del Sistema",
+        title="📊 Relación entre Uso de CPU y Temperatura",
+        labels={"Uso CPU (%)": "Uso de CPU (%)", "Temperatura (°C)": "Temperatura (°C)"},
+        hover_name="Estado del Sistema"
+    ), use_container_width=True)
+    st.write("Este gráfico muestra la relación entre el uso de CPU y la temperatura, permitiendo identificar patrones y anomalías.")
+    
 # 🔹 Sección 2: Sección de Pronósticos
 st.header("📈 Sección de Pronósticos")
 
