@@ -7,10 +7,10 @@ from sklearn.ensemble import RandomForestRegressor
 import os
 
 # 🛠️ Configurar la página
-st.set_page_config(page_title="Tablero de Monitoreo", page_icon="📊", layout="wide")
+st.set_page_config(page_title=" Tablero de Monitoreo en Streamlit para la Gestión de Infraestructura TI", page_icon="📊", layout="wide")
 
 # 📢 Título del tablero
-st.title("📊 Tablero de Monitoreo del Sistema")
+st.title("📊  Tablero de Monitoreo en Streamlit para la Gestión de Infraestructura TI")
 
 # 💞 Cargar Dataset
 DATASET_URL = "dataset_procesado.csv"
