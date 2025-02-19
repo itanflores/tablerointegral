@@ -7,6 +7,10 @@ from sklearn.ensemble import RandomForestRegressor
 import os
 import boto3
 
+# Desactivar protección CSRF en Streamlit para permitir conexiones externas
+st.set_option("server.enableCORS", False)
+st.set_option("server.enableXsrfProtection", False)
+
 # 🛠️ Configurar la página
 st.set_page_config(page_title=" Tablero de Monitoreo en Streamlit para la Gestión de Infraestructura TI", page_icon="📊", layout="wide")
 # Ruta de salud para App Runner
