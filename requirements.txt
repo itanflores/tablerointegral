@@ -11,3 +11,5 @@ requests
 datetime
 configparser
 joblib
+gunicorn
+watchdog
