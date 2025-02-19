@@ -9,7 +9,10 @@ import boto3
 
 # 🛠️ Configurar la página
 st.set_page_config(page_title=" Tablero de Monitoreo en Streamlit para la Gestión de Infraestructura TI", page_icon="📊", layout="wide")
-
+# Ruta de salud para App Runner
+if "health" in st.experimental_get_query_params():
+    st.write("OK")
+    st.stop()
 # 📢 Título del tablero
 st.title("📊  Tablero de Monitoreo en Streamlit para la Gestión de Infraestructura TI")
 
