@@ -5,6 +5,7 @@ import numpy as np
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
 import os
+import boto3
 
 # 🛠️ Configurar la página
 st.set_page_config(page_title=" Tablero de Monitoreo en Streamlit para la Gestión de Infraestructura TI", page_icon="📊", layout="wide")
@@ -12,15 +13,28 @@ st.set_page_config(page_title=" Tablero de Monitoreo en Streamlit para la Gesti�
 # 📢 Título del tablero
 st.title("📊  Tablero de Monitoreo en Streamlit para la Gestión de Infraestructura TI")
 
-# 💞 Cargar Dataset
-DATASET_URL = "dataset_procesado.csv"
-if not os.path.exists(DATASET_URL):
-    st.error("❌ Error: El dataset no se encuentra en la ruta especificada.")
-    st.stop()
+# 🔹 Variables de entorno para AWS S3
+S3_BUCKET = os.environ.get("S3_BUCKET", "tfm-monitoring-data")
+S3_FILE = os.environ.get("S3_FILE", "dataset_procesado.csv")
+LOCAL_FILE = "dataset_procesado.csv"
 
-df = pd.read_csv(DATASET_URL)
+# 💞 Cargar Dataset desde S3
+if not os.path.exists(LOCAL_FILE):
+    s3 = boto3.client('s3')
+    try:
+        s3.download_file(S3_BUCKET, S3_FILE, LOCAL_FILE)
+    except Exception as e:
+        st.error(f"❌ Error: No se pudo descargar el dataset desde S3. Detalle: {e}")
+        st.stop()
+
+# 📌 Leer dataset
+df = pd.read_csv(LOCAL_FILE)
 df.columns = df.columns.str.strip()
 df['Fecha'] = pd.to_datetime(df['Fecha'])
+
+# 📌 Configuración de Streamlit en App Runner
+if __name__ == "__main__":
+    st.write("🚀 La aplicación está corriendo en AWS App Runner en el puerto 8080")
 
 # 📌 Filtros
 estados_seleccionados = st.multiselect("Selecciona uno o más Estados:", df["Estado del Sistema"].unique(), default=df["Estado del Sistema"].unique())
@@ -35,7 +49,6 @@ df_grouped["Cantidad_Suavizada"] = df_grouped.groupby("Estado del Sistema")["Can
 
 df_avg = df_filtrado.groupby("Estado del Sistema")[["Uso CPU (%)", "Memoria Utilizada (%)", "Carga de Red (MB/s)"]].mean().reset_index()
 
-# 🔹 Sección 1: Estado Actual
 # 🔹 Sección 1: Estado Actual
 st.header("📌 Estado Actual")
 kpi1, kpi2, kpi3, kpi4 = st.columns(4)
