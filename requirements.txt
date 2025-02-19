@@ -7,8 +7,6 @@ matplotlib
 seaborn
 scikit-learn
 xgboost
-tensorflow
-pyngrok
 requests
 datetime
 configparser
